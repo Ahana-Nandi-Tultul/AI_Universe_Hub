@@ -1,11 +1,11 @@
-const loadTools = async(dataLimit) =>{
+const loadTools = async(dataLimit, sorted) =>{
     try{
         // start Spinner;
         isLoading(true);
 
         const res = await fetch(`https://openapi.programming-hero.com/api/ai/tools`);
         const data = await res.json();
-        displayTools(data.data.tools, dataLimit);
+        displayTools(data.data.tools, dataLimit, sorted);
     }
     catch(error){
         console.log(error);
@@ -15,11 +15,10 @@ const loadTools = async(dataLimit) =>{
     }
 }
 
-const displayTools = (data, dataLimit) =>{
-    console.log(data);
+const displayTools = (data, dataLimit, sorted) =>{
+    // console.log(data);
     const toolsDiv = document.getElementById('tools-div');
     
-
     // display silce of data
     const seeMoreBtnDiv = document.getElementById('see-more-btn-div')
     if(dataLimit && data.length > 6){
@@ -29,10 +28,18 @@ const displayTools = (data, dataLimit) =>{
     else{
         seeMoreBtnDiv.classList.add('d-none');
     }
+
+    // sort data by date
+    if(sorted){
+        data.sort((date1, date2)=>{
+            return new Date(date1.published_in) - new Date(date2.published_in);
+        });
+    }
     
     toolsDiv.innerHTML = '';
 
     data.forEach(element => {
+        
         const toolCardDiv = document.createElement('div');
         toolCardDiv.classList.add('col');
         // console.log(element);
@@ -88,12 +95,15 @@ const displayFeatures = (toolcardBody, features) =>{
     });
     toolcardBody.appendChild(ol);
 }
+
+// see more button
 document.getElementById('btn-seeMore').addEventListener('click', function(){
     loadTools();
 })
 
+// adding spinner
 const isLoading = (status) =>{
-    console.log(status);
+    // console.log(status);
     const spinner = document.getElementById('spinner');
     if(!status){
         spinner.classList.add('d-none');
@@ -103,4 +113,8 @@ const isLoading = (status) =>{
     }
 }
 
+// sort by date
+document.getElementById('btn-sort-date').addEventListener('click', function(){
+    loadTools('', true);
+})
 loadTools(6);
