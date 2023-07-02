@@ -142,16 +142,21 @@ const showDetails = (data) => {
     const detailsModal = document.getElementById('details-modal');
     detailsModal.innerHTML = '';
     detailsModal.innerHTML = `
-    <div class="row p-5 row-cols-1 row-cols-md-2 g-4">
+    <div class="row p-2 row-cols-1 row-cols-md-2 g-4">
         <div class="col">
             <div class="h-100 card bg-danger bg-opacity-10 border border-1 border-danger">
                 <div class="card-body">
-                    <h5 class="card-title">${data.description ? data.description : "Not Found" }</h5>
-                    <div class="d-flex text-center" id="price-div">
+                    <h5 class="card-title my-2">${data.description ? data.description : "Not Found" }</h5>
+                    <div class="d-flex flex-column  flex-md-row text-center my-3" id="price-div">
                         
                     </div>
-                    <div id="features-div">
-                        <h5 class="card-title">Features</h5>
+                    <div class ="d-flex flex-column flex-md-row"> 
+                        <div id="features-div">
+                            <h5 class="card-title">Features</h5>
+                        </div>
+                        <div id="integration-div">
+                            <h5 class="card-title">Integrations</h5>
+                        </div>
                     </div>
                 </div>
             </div>    
@@ -193,12 +198,25 @@ const showDetails = (data) => {
 
     const featuresDiv = document.getElementById('features-div');
     if(data.features && Object.keys(data.features).length > 0){
-        displayListInfoInsideModal(data.features, featuresDiv)
+        displayFeaturesInsideModal(data.features, featuresDiv)
+    }
+    else{
+        featuresDiv.innerHTML += 
+        `<p class= "text-center">No Feature Found.</p>`;
+    }
+    const integrationDiv = document.getElementById('integration-div');
+    if(data.integrations && Object.keys(data.integrations).length > 0){
+        displayIntegrationsInsideModal(data.integrations, integrationDiv)
+    }
+    else{
+        integrationDiv.innerHTML += `
+        <p class= "text-center">No Integration Found.</p>
+        `;
     }
 }
 
 // display features inside modal
-const displayListInfoInsideModal = (data, infoDiv) =>{
+const displayFeaturesInsideModal = (data, infoDiv) =>{
     const ol = document.createElement('ol');
     ol.classList.add('ps-3');
     ol.style.minHeight = '72px';
@@ -208,6 +226,20 @@ const displayListInfoInsideModal = (data, infoDiv) =>{
         <li>${data[key]['feature_name']}</li>
         `;
     }
+    infoDiv.appendChild(ol);
+}
+
+// display integrations inside modal
+const displayIntegrationsInsideModal = (data, infoDiv)=>{
+    const ol = document.createElement('ol');
+    ol.classList.add('ps-3');
+    ol.style.minHeight = '72px';
+    data.forEach(element =>{
+        // console.log(features[key]);
+        ol.innerHTML += `
+        <li>${element}</li>
+        `;
+    })
     infoDiv.appendChild(ol);
 }
 
