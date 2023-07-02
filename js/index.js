@@ -141,13 +141,25 @@ const showDetails = (data) => {
     console.log(data);
     const detailsModal = document.getElementById('details-modal');
     detailsModal.innerHTML = `
-    <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="row p-5 row-cols-1 row-cols-md-2 g-4">
         <div class="col">
-            <div class="card">
+            <div class="card bg-danger bg-opacity-10 border border-1 border-danger">
                 <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">${data.description}</h5>
+                    <div class="d-flex text-center">
+                        <div class="p-2">
+                            <p class="text-success fs-6 fw-semibold">${(data.pricing[0].plan!=='Free')?data.pricing[0].price:"Free of Cost"}/ Basic</p>
+                        </div>
+                        <div class="p-2">
+                            <p class="text-warning-emphasis fs-6 fw-semibold">${(data.pricing[1].plan!=='Free')?data.pricing[1].price:"Free of Cost"}/ Pro</p>
+                        </div>
+                        <div class="p-2">
+                            <p class="text-danger fs-6 fw-semibold">${(data.pricing[2].plan!=='Free')?data.pricing[2].price:"Free of Cost"}/ Enterprise</p>
+                        </div>
+                    </div>
+                    <div id="features-div">
+                        <h5 class="card-title">Features</h5>
+                    </div>
                 </div>
             </div>    
         </div>
@@ -161,12 +173,15 @@ const showDetails = (data) => {
                     top-0 end-0 m-2">${(data.accuracy.score)*100 }% accuracy</button>
                 </>
                 <div class="card-body">
-                    <h5 class="card-title text-center">${data.accuracy.description?"Hi, how are you doing today?": "Can you give any example?"}</h5>
-                    <p class="card-text text-center">${data.accuracy.description?data.accuracy.description:"No! Not Yet! Take a break!!!"}</p>
+                    <h5 class="card-title text-center my-4">${data.accuracy.description?"Hi, how are you doing today?": "Can you give any example?"}</h5>
+                    <p class="card-text text-center mb-2">${data.accuracy.description?data.accuracy.description:"No! Not Yet! Take a break!!!"}</p>
                 </div>
             </div>
         </div>
     </div>
     `;
+
+    const featuresDiv = document.getElementById('features-div');
+    // if(data.features)
 }
 loadTools(6);
