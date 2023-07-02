@@ -1,5 +1,7 @@
 const loadTools = async(dataLimit) =>{
     try{
+        // start Spinner;
+        isLoading(true);
 
         const res = await fetch(`https://openapi.programming-hero.com/api/ai/tools`);
         const data = await res.json();
@@ -7,6 +9,7 @@ const loadTools = async(dataLimit) =>{
     }
     catch(error){
         console.log(error);
+        isLoading(false);
         alert("Sorry! Fixing some internal problems");
         return 0;
     }
@@ -66,7 +69,11 @@ const displayTools = (data, dataLimit) =>{
         toolsDiv.appendChild(toolCardDiv);
         
     });
+    // stop Spinner
+    isLoading(false);
 }
+
+
 
 const displayFeatures = (toolcardBody, features) =>{
     const ol = document.createElement('ol');
@@ -82,7 +89,18 @@ const displayFeatures = (toolcardBody, features) =>{
     toolcardBody.appendChild(ol);
 }
 document.getElementById('btn-seeMore').addEventListener('click', function(){
-    loadTools()
+    loadTools();
 })
+
+const isLoading = (status) =>{
+    console.log(status);
+    const spinner = document.getElementById('spinner');
+    if(!status){
+        spinner.classList.add('d-none');
+    }
+    else{
+        spinner.classList.remove('d-none');
+    }
+}
 
 loadTools(6);
