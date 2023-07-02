@@ -1,9 +1,9 @@
-const loadTools = async() =>{
+const loadTools = async(dataLimit) =>{
     try{
 
         const res = await fetch(`https://openapi.programming-hero.com/api/ai/tools`);
         const data = await res.json();
-        displayTools(data.data.tools);
+        displayTools(data.data.tools, dataLimit);
     }
     catch(error){
         console.log(error);
@@ -12,13 +12,27 @@ const loadTools = async() =>{
     }
 }
 
-const displayTools = (data) =>{
+const displayTools = (data, dataLimit) =>{
     console.log(data);
     const toolsDiv = document.getElementById('tools-div');
+    
+
+    // display silce of data
+    const seeMoreBtnDiv = document.getElementById('see-more-btn-div')
+    if(dataLimit && data.length > 6){
+        data = data.slice(0,6);
+        seeMoreBtnDiv.classList.remove('d-none');
+    }
+    else{
+        seeMoreBtnDiv.classList.add('d-none');
+    }
+    
+    toolsDiv.innerHTML = '';
+
     data.forEach(element => {
         const toolCardDiv = document.createElement('div');
         toolCardDiv.classList.add('col');
-        console.log(element);
+        // console.log(element);
         const toolCard = document.createElement('div');
         toolCard.classList.add("card", "mb-3", "p-3");
         let toolcardBody = document.createElement('div');
@@ -60,12 +74,15 @@ const displayFeatures = (toolcardBody, features) =>{
     ol.style.height = '72px';
     features = features.slice(0, 3);
     features.forEach(feature => {
-        console.log(feature);
+        // console.log(feature);
         ol.innerHTML += `
         <li>${feature}</li>
         `;
     });
     toolcardBody.appendChild(ol);
 }
+document.getElementById('btn-seeMore').addEventListener('click', function(){
+    loadTools()
+})
 
-loadTools();
+loadTools(6);
