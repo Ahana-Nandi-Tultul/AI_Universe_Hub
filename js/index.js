@@ -130,8 +130,8 @@ const loadDetails = async(id) =>{
 
     }
     catch(error){
-        console.log(error);
-        alert("Sorry! Fixing some internal problems");
+        console.log();
+        alert(error);
         return 0;
     }
 }
@@ -140,22 +140,15 @@ const loadDetails = async(id) =>{
 const showDetails = (data) => {
     console.log(data);
     const detailsModal = document.getElementById('details-modal');
+    detailsModal.innerHTML = '';
     detailsModal.innerHTML = `
     <div class="row p-5 row-cols-1 row-cols-md-2 g-4">
         <div class="col">
-            <div class="card bg-danger bg-opacity-10 border border-1 border-danger">
+            <div class="h-100 card bg-danger bg-opacity-10 border border-1 border-danger">
                 <div class="card-body">
-                    <h5 class="card-title">${data.description}</h5>
-                    <div class="d-flex text-center">
-                        <div class="p-2">
-                            <p class="text-success fs-6 fw-semibold">${(data.pricing[0].plan!=='Free')?data.pricing[0].price:"Free of Cost"}/ Basic</p>
-                        </div>
-                        <div class="p-2">
-                            <p class="text-warning-emphasis fs-6 fw-semibold">${(data.pricing[1].plan!=='Free')?data.pricing[1].price:"Free of Cost"}/ Pro</p>
-                        </div>
-                        <div class="p-2">
-                            <p class="text-danger fs-6 fw-semibold">${(data.pricing[2].plan!=='Free')?data.pricing[2].price:"Free of Cost"}/ Enterprise</p>
-                        </div>
+                    <h5 class="card-title">${data.description ? data.description : "Not Found" }</h5>
+                    <div class="d-flex text-center" id="price-div">
+                        
                     </div>
                     <div id="features-div">
                         <h5 class="card-title">Features</h5>
@@ -164,24 +157,58 @@ const showDetails = (data) => {
             </div>    
         </div>
         <div class="col">
-            <div class="card">
+            <div class="card h-100">
                 <div class="position-relative">
                 <div class="p-1">
                     <img src="${data.image_link[0]? data.image_link[0]:data.image_link[1]}" class="card-img-top" alt="...">
                 </div>
                     <button type="button" class="position-absolute btn btn-danger
-                    top-0 end-0 m-2">${(data.accuracy.score)*100 }% accuracy</button>
+                    top-0 end-0 m-2">${data.accuracy.score ? ((data.accuracy.score)*100)+"% accuracy" : "Not Found" }</button>
                 </>
                 <div class="card-body">
-                    <h5 class="card-title text-center my-4">${data.accuracy.description?"Hi, how are you doing today?": "Can you give any example?"}</h5>
-                    <p class="card-text text-center mb-2">${data.accuracy.description?data.accuracy.description:"No! Not Yet! Take a break!!!"}</p>
+                    <h5 class="card-title text-center my-4">${data.accuracy.description ? "Hi, how are you doing today?": "Can you give any example?"}</h5>
+                    <p class="card-text text-center mb-2">${data.accuracy.description ? data.accuracy.description:"No! Not Yet! Take a break!!!"}</p>
                 </div>
             </div>
         </div>
     </div>
     `;
 
+    const priceDiv = document.getElementById('price-div');
+    if((data.pricing) && (data?.pricing.length > 0)){
+       priceDiv.innerHTML = `
+       <div class="p-2">
+            <p class="text-success fs-6 fw-semibold">${(data.pricing[0].plan!=='Free') ?data.pricing[0].price : "Free of Cost"}/ Basic</p>
+        </div>
+        <div class="p-2">
+            <p class="text-warning-emphasis fs-6 fw-semibold">${(data.pricing[1].plan!=='Free')?data.pricing[1].price:"Free of Cost"}/ Pro</p>
+        </div>
+        <div class="p-2">
+            <p class="text-danger fs-6 fw-semibold">${(data.pricing[2].plan!=='Free')?data.pricing[2].price:"Free of Cost"}/ Enterprise</p>
+        </div>`;
+    }
+    else{
+        priceDiv.innerHTML =`<h5 class="card-title text-center">No Pricing Info Found</h5>`;
+    }
+
     const featuresDiv = document.getElementById('features-div');
-    // if(data.features)
+    if(data.features && Object.keys(data.features).length > 0){
+        displayListInfoInsideModal(data.features, featuresDiv)
+    }
 }
+
+// display features inside modal
+const displayListInfoInsideModal = (data, infoDiv) =>{
+    const ol = document.createElement('ol');
+    ol.classList.add('ps-3');
+    ol.style.minHeight = '72px';
+    for(const key in data){
+        // console.log(features[key]);
+        ol.innerHTML += `
+        <li>${data[key]['feature_name']}</li>
+        `;
+    }
+    infoDiv.appendChild(ol);
+}
+
 loadTools(6);
