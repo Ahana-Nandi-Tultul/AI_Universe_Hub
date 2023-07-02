@@ -154,14 +154,15 @@ const showDetails = (data) => {
         <div class="col">
             <div class="card">
                 <div class="position-relative">
+                <div class="p-1">
                     <img src="${data.image_link[0]? data.image_link[0]:data.image_link[1]}" class="card-img-top" alt="...">
-                    <button type="button" class="position-absolute btn btn-danger
-                    top-0 end-0 m-3">${(data.accuracy.score)*100 }% accuracy</button>
                 </div>
+                    <button type="button" class="position-absolute btn btn-danger
+                    top-0 end-0 m-2">${(data.accuracy.score)*100 }% accuracy</button>
+                </>
                 <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title text-center">${data.accuracy.description?"Hi, how are you doing today?": "Can you give any example?"}</h5>
+                    <p class="card-text text-center">${data.accuracy.description?data.accuracy.description:"No! Not Yet! Take a break!!!"}</p>
                 </div>
             </div>
         </div>
