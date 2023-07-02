@@ -24,10 +24,24 @@
         </div>
         <div class="text-center mt-3 d-none" id="spinner">
             <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
+                <span class="visually-hidden">Loading...</span>
             </div>
-          </div>
+        </div>
     </section>
+   
+
+    <!-- Modal -->
+    <div class="modal fade" id="showDetailsModal" tabindex="-1" aria-labelledby="showDetailsModalLabel" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content position-relative">
+                <button type="button" class="position-absolute btn-close 
+                start-100 translate-middle p-3 rounded-circle" data-bs-dismiss="modal" aria-label="Close" style="background-color: rgb(197, 38, 38); opacity: 1.0;"></button>
+                <div class="modal-body" id="details-modal">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="js/index.js"></script>
     <!-- bootstrap JS -->

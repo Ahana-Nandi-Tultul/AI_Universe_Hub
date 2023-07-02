@@ -67,7 +67,9 @@ const displayTools = (data, dataLimit, sorted) =>{
                 <p><i class="fa fa-calendar-o" aria-hidden="true"></i> ${element.published_in?element.published_in: "Not Found"}</p>
             </div>
             <div>
-                <button class= "btn"><i class="fa fa-long-arrow-right text-danger" aria-hidden="true"></i></button>
+                <button type="button" onclick="loadDetails('${element.id}')" class="btn" data-bs-toggle="modal" data-bs-target="#showDetailsModal">
+                <i class="fa fa-long-arrow-right text-danger" aria-hidden="true"></i>
+            </button>
             </div>
         </div>
         `;
@@ -85,7 +87,7 @@ const displayTools = (data, dataLimit, sorted) =>{
 const displayFeatures = (toolcardBody, features) =>{
     const ol = document.createElement('ol');
     ol.classList.add('ps-3');
-    ol.style.height = '72px';
+    ol.style.minHeight = '72px';
     features = features.slice(0, 3);
     features.forEach(feature => {
         // console.log(feature);
@@ -117,4 +119,53 @@ const isLoading = (status) =>{
 document.getElementById('btn-sort-date').addEventListener('click', function(){
     loadTools('', true);
 })
+
+// load details Info of tools
+const loadDetails = async(id) =>{
+    try{
+        const url = `https://openapi.programming-hero.com/api/ai/tool/${id}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        showDetails(data.data);
+
+    }
+    catch(error){
+        console.log(error);
+        alert("Sorry! Fixing some internal problems");
+        return 0;
+    }
+}
+
+// show details info
+const showDetails = (data) => {
+    console.log(data);
+    const detailsModal = document.getElementById('details-modal');
+    detailsModal.innerHTML = `
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>    
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="position-relative">
+                    <img src="${data.image_link[0]? data.image_link[0]:data.image_link[1]}" class="card-img-top" alt="...">
+                    <button type="button" class="position-absolute btn btn-danger
+                    top-0 end-0 m-3">${(data.accuracy.score)*100 }% accuracy</button>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+}
 loadTools(6);
